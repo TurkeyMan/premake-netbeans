@@ -4,13 +4,13 @@
 -- Copyright (c) 2013 Santo Pfingsten
 --
 
-	premake.netbeans.makefile = {}
-	premake.netbeans.projectfile = {}
-	premake.netbeans.configfile = {}
-	local netbeans = premake.netbeans
-	local makefile = premake.netbeans.makefile
-	local projectfile = premake.netbeans.projectfile
-	local configfile = premake.netbeans.configfile
+	premake.extensions.netbeans.makefile = {}
+	premake.extensions.netbeans.projectfile = {}
+	premake.extensions.netbeans.configfile = {}
+	local netbeans = premake.extensions.netbeans
+	local makefile = premake.extensions.netbeans.makefile
+	local projectfile = premake.extensions.netbeans.projectfile
+	local configfile = premake.extensions.netbeans.configfile
 	
 	local project = premake.project
 	local config = premake.config

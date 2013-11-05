@@ -1,14 +1,29 @@
 --
--- _netbeans.lua
+-- netbeans.lua
 -- Define the netbeans action(s).
 -- Copyright (c) 2013 Santo Pfingsten
 --
 
-	premake.netbeans = { }
-	local netbeans = premake.netbeans
+	premake.extensions.netbeans = { }
+	local netbeans = premake.extensions.netbeans
 	local solution = premake.solution
 	local project = premake.project
-	
+
+	netbeans.support_url = "https://bitbucket.org/premakeext/netbeans/wiki/Home"
+
+	netbeans.printf = function( msg, ... )
+		printf( "[netbeans] " .. msg, ...)
+	end
+
+	netbeans.printf( "Premake NetBeans Extension (" .. netbeans.support_url .. ")" )
+
+	-- Extend the package path to include the directory containing this
+	-- script so we can easily 'require' additional resources from
+	-- subdirectories as necessary
+	local this_dir = debug.getinfo(1, "S").source:match[[^@?(.*[\/])[^\/]-$]];
+	package.path = this_dir .. "actions/?.lua;".. package.path
+
+
 --
 -- Register the "netbeans" action
 --
@@ -37,7 +52,8 @@
 			premake.clean.directory(prj, prj.name)
 		end
 	}
-	
+
+
 ---
 -- Apply XML escaping on a value to be included in an
 -- exported project file.
@@ -72,3 +88,11 @@
 		end
 		return toolset
 	end
+
+
+--
+-- 'require' the project generation code.
+--
+
+	require( "netbeans_cpp" )
+	netbeans.printf( "Loaded NetBeans C/C++ support 'netbeans_cpp.lua'", v )
