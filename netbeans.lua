@@ -1,57 +1,16 @@
 --
--- netbeans.lua
+-- netbeans/netbeans.lua
 -- Define the netbeans action(s).
--- Copyright (c) 2013 Santo Pfingsten
+-- Copyright (c) 2013-2015 Santo Pfingsten
 --
 
-	premake.extensions.netbeans = { }
-	local netbeans = premake.extensions.netbeans
-	local solution = premake.solution
-	local project = premake.project
+	local p = premake
 
-	netbeans.support_url = "https://bitbucket.org/premakeext/netbeans/wiki/Home"
+	p.modules.netbeans = { }
 
-	netbeans.printf = function( msg, ... )
-		printf( "[netbeans] " .. msg, ...)
-	end
-
-	netbeans.printf( "Premake NetBeans Extension (" .. netbeans.support_url .. ")" )
-
-	-- Extend the package path to include the directory containing this
-	-- script so we can easily 'require' additional resources from
-	-- subdirectories as necessary
-	local this_dir = debug.getinfo(1, "S").source:match[[^@?(.*[\/])[^\/]-$]];
-	package.path = this_dir .. "actions/?.lua;".. package.path
-
-
---
--- Register the "netbeans" action
---
-
-	newaction {
-		trigger         = "netbeans",
-		shortname       = "NetBeans",
-		description     = "Generate NetBeans project files",
-	
-		valid_kinds     = { "ConsoleApp", "WindowedApp", "StaticLib", "SharedLib" },
-		
-		valid_languages = { "C", "C++" },
-		
-		valid_tools     = {
-			cc     = { "clang", "gcc" },
-		},
-		
-		onproject = function(prj)
-			io.esc = netbeans.esc
-			premake.generate(prj, prj.name .. "/Makefile", netbeans.makefile.generate)
-			premake.generate(prj, prj.name .. "/nbproject/project.xml", netbeans.projectfile.generate)
-			premake.generate(prj, prj.name .. "/nbproject/configurations.xml", netbeans.configfile.generate)
-		end,
-		
-		oncleanproject = function(prj)
-			premake.clean.directory(prj, prj.name)
-		end
-	}
+	local netbeans = p.modules.netbeans
+	local solution = p.solution
+	local project = p.project
 
 
 ---
@@ -69,7 +28,7 @@
 		value = value:gsub('\n', "&#x0A;")
 		return value
 	end
-	
+
 	function netbeans.escapepath(prj, file)
 		if path.isabsolute(file) then
 			file = project.getrelative(prj, file)
@@ -78,21 +37,26 @@
 		if not path.isabsolute(file) then
 			file = path.join('../', file)
 		end
-		return premake.esc(file)
+		return p.esc(file)
 	end  
-	
+
 	function netbeans.gettoolset(cfg)
-		local toolset = premake.tools[cfg.toolset or "gcc"]
+		local toolset = p.tools[cfg.toolset or "gcc"]
 		if not toolset then
 			error("Invalid toolset '" + cfg.toolset + "'")
 		end
 		return toolset
 	end
 
+	function netbeans.generate(prj)
+		p.escaper(netbeans.esc)
+		p.generate(prj, prj.name .. "/Makefile", p.modules.netbeans.makefile.generate)
+		p.generate(prj, prj.name .. "/nbproject/project.xml", p.modules.netbeans.projectfile.generate)
+		p.generate(prj, prj.name .. "/nbproject/configurations.xml", p.modules.netbeans.configfile.generate)
+	end
 
---
--- 'require' the project generation code.
---
 
-	require( "netbeans_cpp" )
-	netbeans.printf( "Loaded NetBeans C/C++ support 'netbeans_cpp.lua'", v )
+	include("_preload.lua")
+	include("netbeans_cpp.lua")
+
+	return netbeans

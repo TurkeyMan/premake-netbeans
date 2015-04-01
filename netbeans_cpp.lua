@@ -1,21 +1,24 @@
 --
--- netbeans_cpp.lua
+-- netbeans/netbeans_cpp.lua
 -- Generate a C/C++ netbeans project.
--- Copyright (c) 2013 Santo Pfingsten
+-- Copyright (c) 2013-2015 Santo Pfingsten
 --
 
-	premake.extensions.netbeans.makefile = {}
-	premake.extensions.netbeans.projectfile = {}
-	premake.extensions.netbeans.configfile = {}
-	local netbeans = premake.extensions.netbeans
-	local makefile = premake.extensions.netbeans.makefile
-	local projectfile = premake.extensions.netbeans.projectfile
-	local configfile = premake.extensions.netbeans.configfile
+	local p = premake
+
+	p.modules.netbeans.makefile = {}
+	p.modules.netbeans.projectfile = {}
+	p.modules.netbeans.configfile = {}
+
+	local netbeans = p.modules.netbeans
+	local makefile = p.modules.netbeans.makefile
+	local projectfile = p.modules.netbeans.projectfile
+	local configfile = p.modules.netbeans.configfile
 	
-	local project = premake.project
-	local config = premake.config
-	local fileconfig = premake.fileconfig
-	local tree = premake.tree
+	local project = p.project
+	local config = p.config
+	local fileconfig = p.fileconfig
+	local tree = p.tree
 
 ---------------------------------------------------------------------------
 --
