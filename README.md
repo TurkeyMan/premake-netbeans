@@ -6,4 +6,4 @@ Supported features:
 
 Todo:
 
-* D projects
+* Java?

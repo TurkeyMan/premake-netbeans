@@ -1,5 +1,7 @@
 return {
 	"_preload.lua",
 	"netbeans.lua",
-	"netbeans_cpp.lua",
+	"netbeans_makefile.lua",
+	"netbeans_project.lua",
+	"netbeans_configurations.lua",
 }

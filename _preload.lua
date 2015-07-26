@@ -35,3 +35,12 @@
 			p.clean.directory(prj, prj.name)
 		end
 	}
+
+
+--
+-- Decide when the full module should be loaded.
+--
+
+	return function(cfg)
+		return (_ACTION == "netbeans")
+	end

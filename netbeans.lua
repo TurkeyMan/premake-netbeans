@@ -1,24 +1,29 @@
 --
 -- netbeans/netbeans.lua
 -- Define the netbeans action(s).
+-- Author: Santo Pfingsten
+--         Manu Evans
 -- Copyright (c) 2013-2015 Santo Pfingsten
 --
 
 	local p = premake
 
-	p.modules.netbeans = { }
+	p.modules.netbeans = {}
 
-	local netbeans = p.modules.netbeans
+	local m = p.modules.netbeans
+
 	local solution = p.solution
 	local project = p.project
 
+	m._VERSION = "0.0.1"
+	m.elements = {}
 
 ---
 -- Apply XML escaping on a value to be included in an
 -- exported project file.
 ---
 
-	function netbeans.esc(value)
+	function m.esc(value)
 		value = string.gsub(value, '&',  "&amp;")
 		value = value:gsub('"',  "&quot;")
 		value = value:gsub("'",  "&apos;")
@@ -29,7 +34,7 @@
 		return value
 	end
 
-	function netbeans.escapepath(prj, file)
+	function m.escapepath(prj, file)
 		if path.isabsolute(file) then
 			file = project.getrelative(prj, file)
 		end
@@ -40,7 +45,7 @@
 		return p.esc(file)
 	end  
 
-	function netbeans.gettoolset(cfg)
+	function m.gettoolset(cfg)
 		local toolset = p.tools[cfg.toolset or "gcc"]
 		if not toolset then
 			error("Invalid toolset '" + cfg.toolset + "'")
@@ -48,15 +53,18 @@
 		return toolset
 	end
 
-	function netbeans.generate(prj)
-		p.escaper(netbeans.esc)
-		p.generate(prj, prj.name .. "/Makefile", p.modules.netbeans.makefile.generate)
-		p.generate(prj, prj.name .. "/nbproject/project.xml", p.modules.netbeans.projectfile.generate)
-		p.generate(prj, prj.name .. "/nbproject/configurations.xml", p.modules.netbeans.configfile.generate)
+	function m.generate(prj)
+		p.escaper(m.esc)
+		p.indent("  ")
+		p.generate(prj, prj.name .. "/Makefile", m.makefile.generate)
+		p.generate(prj, prj.name .. "/nbproject/project.xml", m.project.generate)
+		p.generate(prj, prj.name .. "/nbproject/configurations.xml", m.configurations.generate)
 	end
 
 
 	include("_preload.lua")
-	include("netbeans_cpp.lua")
+	include("netbeans_makefile.lua")
+	include("netbeans_project.lua")
+	include("netbeans_configurations.lua")
 
-	return netbeans
+	return m
