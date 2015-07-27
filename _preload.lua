@@ -17,7 +17,6 @@
 		trigger         = "netbeans",
 		shortname       = "NetBeans",
 		description     = "Generate NetBeans project files",
-		module          = "netbeans",
 
 		valid_kinds     = { "ConsoleApp", "WindowedApp", "StaticLib", "SharedLib" },
 

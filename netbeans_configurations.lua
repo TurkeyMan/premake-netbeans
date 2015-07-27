@@ -121,9 +121,9 @@
 
 		local output = m.escapepath(prj, path.join(cfg.buildtarget.directory, cfg.buildtarget.name))
 		if cfg.kind == "StaticLib" then
-			m.configurations.archiver(cfg, prj)
+			m.configurations.archiver(cfg, prj, output)
 		else
-			m.configurations.linker(cfg, prj, toolset)
+			m.configurations.linker(cfg, prj, toolset, output)
 		end
 
 		-- TODO: <requiredProjects />
@@ -151,13 +151,13 @@
 		_p(4, '</%s>', toolName)
 	end
 
-	function m.configurations.archiver(cfg, prj)
+	function m.configurations.archiver(cfg, prj, output)
 		_p(4, '<archiverTool>')
 		_p(5, '<output>%s</output>', output)
 		_p(4, '</archiverTool>')
 	end
 
-	function m.configurations.linker(cfg, prj, toolset)
+	function m.configurations.linker(cfg, prj, toolset, output)
 		_p(4, '<linkerTool>')
 
 		_p(5, '<linkerAddLib>')

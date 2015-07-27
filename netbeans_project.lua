@@ -47,19 +47,21 @@
 
 		-- If there are files inside this folder, use the parent folder
 		local numChildren = #tr.children
+		local rootDir = nil
 		for i = 1, numChildren do
 			-- Only files have relpath set
 			if tr.children[i].relpath then
-				tr = tr.parent
-				numChildren = 1
+				rootDir = path.getdirectory(tr.children[i].relpath)
 				break
 			end
 		end
 		
-		print(numChildren)
-		for i = 1, numChildren do
---			local child = 
-			_p(d, '<%s>%s</%s>', tagname, m.escapepath(prj, tr.children[i].path), tagname)
+		if rootDir ~= nil then
+			_p(d, '<%s>%s</%s>', tagname, m.escapepath(prj, rootDir), tagname)
+		else
+			for i = 1, numChildren do
+				_p(d, '<%s>%s</%s>', tagname, m.escapepath(prj, tr.children[i].path), tagname)
+			end
 		end
 	end
 
