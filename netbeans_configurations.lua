@@ -137,6 +137,19 @@
 		if not config.isDebugBuild(cfg) and cfg.flags.ReleaseRuntime then
 			_p(5, '<developmentMode>5</developmentMode>')
 		end
+		
+		-- C++11/14 support
+		if toolName == 'ccTool' then
+			if cfg.flags['C++14'] then
+				-- todo: Change to correct Number once NetBeans supports it.
+				-- For now C++11 support + gcc flag
+				_p(5, '<standard>8</standard>')
+				table.insert(flags, "-std=c++14")
+			elseif cfg.flags['C++11'] then
+				_p(5, '<standard>8</standard>')
+			end
+		end
+
 		_p(5, '<incDir>')
 		for _, incdir in ipairs(cfg.includedirs) do
 			_p(6, '<pElem>%s</pElem>', m.escapepath(cfg.project, incdir))
