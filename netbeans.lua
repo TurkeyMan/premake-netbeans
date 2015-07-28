@@ -39,9 +39,6 @@
 			file = project.getrelative(prj, file)
 		end
 		
-		if not path.isabsolute(file) then
-			file = path.join('../', file)
-		end
 		return p.esc(file)
 	end  
 
@@ -56,9 +53,9 @@
 	function m.generate(prj)
 		p.escaper(m.esc)
 		p.indent("  ")
-		p.generate(prj, prj.name .. "/Makefile", m.makefile.generate)
-		p.generate(prj, prj.name .. "/nbproject/project.xml", m.project.generate)
-		p.generate(prj, prj.name .. "/nbproject/configurations.xml", m.configurations.generate)
+		p.generate(prj, "Makefile", m.makefile.generate)
+		p.generate(prj, "nbproject/project.xml", m.project.generate)
+		p.generate(prj, "nbproject/configurations.xml", m.configurations.generate)
 	end
 
 
