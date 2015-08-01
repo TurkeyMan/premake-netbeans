@@ -39,6 +39,11 @@
 			file = project.getrelative(prj, file)
 		end
 		
+		if(prj.flags.nbProjectFolder) then
+			if not path.isabsolute(file) then
+				file = path.join('../', file)
+			end
+		end
 		return p.esc(file)
 	end  
 
@@ -53,9 +58,10 @@
 	function m.generate(prj)
 		p.escaper(m.esc)
 		p.indent("  ")
-		p.generate(prj, "Makefile", m.makefile.generate)
-		p.generate(prj, "nbproject/project.xml", m.project.generate)
-		p.generate(prj, "nbproject/configurations.xml", m.configurations.generate)
+		local folderPrefix = prj.flags.nbProjectFolder and (prj.name .. "/") or ""
+		p.generate(prj, folderPrefix .. "Makefile", m.makefile.generate)
+		p.generate(prj, folderPrefix .. "nbproject/project.xml", m.project.generate)
+		p.generate(prj, folderPrefix .. "nbproject/configurations.xml", m.configurations.generate)
 	end
 
 
