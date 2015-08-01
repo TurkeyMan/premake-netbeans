@@ -34,7 +34,14 @@
 			p.clean.directory(prj, prj.name)
 		end
 	}
+	
+--
+-- Add a new flag to put netbeans projects into subdirectories
+--
 
+	p.api.addAllowed("flags", {
+		"nbProjectFolder"
+	})
 
 --
 -- Decide when the full module should be loaded.
